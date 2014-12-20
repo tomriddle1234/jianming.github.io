@@ -4,9 +4,16 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Jianming'
 SITENAME = u'vfxware'
-SITEURL = ''
+SITEURL = 'http://vfxware.com'
+GITHUB_URL = 'http://github.com/tomriddle1234'
+
+
+#this is for development only
+RELATIVE_URLS = True
 
 THEME = "pelican-bootstrap3"
+DISPLAY_CATEGORIES_ON_MENU = False
+
 DISQUS_SITENAME = u"vfxware"
 
 PATH = 'content'
@@ -46,7 +53,7 @@ LINKS = (('Pelican', 'http://getpelican.com/'),)
          #('You can modify those links in your config file', '#'),)
 
 # Social widget
-SOCIAL = (('Not presented yet', '#'),)
+SOCIAL = ((u'WeChat', 'weixin://contacts/profile/tomriddle_jianming'),)
           #('Another social link', '#'),)
 
 DEFAULT_PAGINATION = 10
