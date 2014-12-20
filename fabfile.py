@@ -11,7 +11,7 @@ DEPLOY_PATH = env.deploy_path
 
 # Remote server configuration
 production = 'tom@threebody:22'
-dest_path = '/srv/www/vfxware_pelican'
+dest_path = '/srv/www/vfxware.com/public_html'
 
 # Rackspace Cloud Files configuration settings
 env.cloudfiles_username = 'my_rackspace_username'
