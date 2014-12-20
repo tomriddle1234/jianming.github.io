@@ -7,12 +7,32 @@ SITENAME = u'vfxware'
 SITEURL = ''
 
 THEME = "pelican-bootstrap3"
+DISQUS_SITENAME = u"vfxware"
 
 PATH = 'content'
+STATIC_PATHS = [u"img"]
 
 TIMEZONE = 'Asia/Shanghai'
 
 DEFAULT_LANG = u'en'
+
+PLUGIN_PATHS = ["plugins","/home/tom/src/pelican-plugins"]
+
+PLUGINS = ["sitemap"]
+
+SITEMAP = {
+    "format": "xml",
+    "priorities": {
+        "articles": 0.7,
+        "indexes": 0.5,
+        "pages": 0.3,
+    },
+    "changefreqs": {
+        "articles": "daily",
+        "indexes": "daily",
+        "pages": "monthly",
+    }
+}
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -22,14 +42,12 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),
-         ('Python.org', 'http://python.org/'),
-         ('Jinja2', 'http://jinja.pocoo.org/'),
-         ('You can modify those links in your config file', '#'),)
+LINKS = (('Pelican', 'http://getpelican.com/'),)
+         #('You can modify those links in your config file', '#'),)
 
 # Social widget
-SOCIAL = (('You can add links in your config file', '#'),
-          ('Another social link', '#'),)
+SOCIAL = (('Not presented yet', '#'),)
+          #('Another social link', '#'),)
 
 DEFAULT_PAGINATION = 10
 
