@@ -63,6 +63,9 @@ def cf_upload():
 
 @hosts(production)
 def publish():
+    #change the relative url settings in the pelicanconf.py
+    local('sed -i \'s/RELATIVE_URLS = True/RELATIVE_URLS = False/g\' pelicanconf.py')
+    
     local('pelican -s publishconf.py')
     project.rsync_project(
         remote_dir=dest_path,
@@ -71,3 +74,4 @@ def publish():
         delete=True,
         extra_opts='-c',
     )
+    local('sed -i \'s/RELATIVE_URLS = False/RELATIVE_URLS = True/g\' pelicanconf.py')
