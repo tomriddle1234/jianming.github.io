@@ -3,5 +3,43 @@ Date: 2014-12-18 23:00
 Category: web
 
 Hellow World!
-Now I'm trying to use the python based static blog generator, pelican.
-Created this article with vim !
+
+I'm using the python based static blog generator, pelican.
+So I can create this article with vim !
+
+And now test the pygments.
+
+first piece:
+	
+	#!bash
+	#!/bin/bash
+	echo "Hello, World!"
+
+second piece:
+
+	:::python
+	def hello():
+		print "Hello, World!"
+
+third piece:
+
+	:::c++
+	#include <iostream>
+	
+	int main()
+	{
+		std::cout << "Hello, World!" << std::endl ;
+		return 0 ;
+	}
+
+fourth piece:
+	
+	#!c++
+	#include <iostream>
+	
+	int main()
+	{
+	        std::cout << "Hello, World!" << std::endl ;
+	        return 0 ;
+	}
+	
