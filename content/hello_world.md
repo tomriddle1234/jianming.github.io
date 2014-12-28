@@ -11,35 +11,35 @@ And now test the pygments.
 
 first piece:
 	
-	#!bash
-	#!/bin/bash
-	echo "Hello, World!"
+    :::sh
+    #!/bin/bash
+    echo "Hello, World!"
 
 second piece:
 
-	:::python
-	def hello():
-		print "Hello, World!"
+    :::python
+    def hello():
+	    print "Hello, World!"
 
 third piece:
 
-	:::c++
-	#include <iostream>
-	
-	int main()
-	{
-		std::cout << "Hello, World!" << std::endl ;
-		return 0 ;
-	}
+    :::c++
+    #include <iostream>
+
+    int main()
+    {
+	    std::cout << "Hello, World!" << std::endl ;
+	    return 0 ;
+    }
 
 fourth piece:
 	
-	#!c++
-	#include <iostream>
-	
-	int main()
-	{
-	        std::cout << "Hello, World!" << std::endl ;
-	        return 0 ;
-	}
+    #!c++
+    #include <iostream>
+
+    int main()
+    {
+        std::cout << "Hello, World!" << std::endl ;
+        return 0 ;
+    }
 	

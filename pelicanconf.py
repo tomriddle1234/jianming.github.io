@@ -6,6 +6,9 @@ from __future__ import unicode_literals
 AUTHOR = u'Jianming'
 SITENAME = u'vfxware'
 SITEURL = 'http://vfxware.com'
+BANNER = '/img/testpng.png'
+BANNER_SUBTITLE = 'VFX, Computer Vision, Programming And Life'
+BANNER_ALL_PAGES = True
 GITHUB_URL = 'http://github.com/tomriddle1234'
 
 TIMEZONE = 'Asia/Shanghai'
@@ -14,9 +17,16 @@ DEFAULT_LANG = u'en'
 # Looks
 THEME = "pelican-bootstrap3"
 BOOTSTRAP_THEME = "slate"
-CUSTOM_CSS = 'static/custom.css'
+CUSTOM_CSS = 'extra/custom.css'
 PYGMENTS_STYLE = 'monokai'
+
+
 DISPLAY_CATEGORIES_ON_MENU = False
+DISPLAY_CATEGORIES_ON_SIDEBAR = True
+DISPLAY_TAGS_ON_SIDEBAR = True
+DISPLAY_TAGS_INLINE = True
+DISPLAY_RECENT_POSTS_ON_SIDEBAR = True
+RECENT_POST_COUNT = 5
 
 # Comment configuration
 DISQUS_SITENAME = u"vfxware"
@@ -25,9 +35,9 @@ DISQUS_SITENAME = u"vfxware"
 PATH = 'content'
 STATIC_PATHS = [u"img",u"extra"]
 # Tell Pelican to change the path to 'static/custom.css' in the output dir
-EXTRA_PATH_METADATA = {
-    'extra/custom.css': {'path': 'static/custom.css'}
-}
+#EXTRA_PATH_METADATA = {
+#    'extra/custom.css': {'path': 'static/custom.css'}
+#}
 
 # Plugins configuration
 PLUGIN_PATHS = ["plugins","/home/tom/src/pelican-plugins"]
