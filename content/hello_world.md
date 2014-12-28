@@ -1,6 +1,7 @@
 Title: Hello World, pelican!
 Date: 2014-12-18 23:00
 Category: web
+Author: Jianming
 
 Hellow World!
 

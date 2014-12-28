@@ -11,6 +11,9 @@ BANNER = '/img/testpng.png'
 BANNER_SUBTITLE = 'VFX, Computer Vision, Programming And Life'
 BANNER_ALL_PAGES = True
 
+SHOW_ARTICLE_AUTHOR = True
+SHOW_ARTICLE_CATEGORY = True
+
 GITHUB_URL = 'http://github.com/tomriddle1234'
 
 TIMEZONE = 'Asia/Shanghai'
@@ -68,11 +71,14 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),)
+LINKS = (('Pelican', 'http://getpelican.com/'),
+         (u'OpenCV','http://opencv.org/'), )
          #('You can modify those links in your config file', '#'),)
 
 # Social widget
-SOCIAL = ((u'WeChat', 'weixin://contacts/profile/tomriddle_jianming'),)
+SOCIAL = ((u'WeChat', 'weixin://contacts/profile/tomriddle_jianming'),
+	   (u'bitBucket', 'https://bitbucket.org/jianming_tom'),
+           (u'GitHub', 'https://github.com/tomriddle1234'),)
           #('Another social link', '#'),)
 
 DEFAULT_PAGINATION = 10

@@ -2,6 +2,7 @@ Title: Binary format of the negative number for serial device programming
 Date: 2014-12-28
 Category: Programming
 Tags: Serial, Python, Pyserial
+Author: Jianming
 
 When I happens to program for a step motor controller, I found it uses positive/negative number formatted in 4 bytes to represent the rotating step number with the direction. In the manual it says the the device checks if the highest bit is 1, then the 4 bytes value represent a 31 bits available negative direction step number. However this is really about the signed number representations rather than check the highest bit.
 
