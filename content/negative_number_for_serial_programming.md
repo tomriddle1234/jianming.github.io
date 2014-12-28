@@ -28,11 +28,11 @@ Usually we send just raw byte strings to a serial device, they are actually bunc
     :::python
 	pack('>i', -2500)
 
-which is '\xff\xff\xf6\x3c'. Sometimes the pack command returns the string in ASCII because Python's default encoding is 'ascii' encoding. To clearify what exactly the command returns, one can use ```pack('>i', -2500).encode('hex')```. Or I have a more complex solution like, ```''.join(r'\x%02X' % ord(ch) for ch in src)```.
+which is '\xff\xff\xf6\x3c'. Sometimes the pack command returns the string in ASCII because Python's default encoding is 'ascii' encoding. To clearify what exactly the command returns, one can use `pack('>i', -2500).encode('hex')`{.python}. Or I have a more complex solution like, `''.join(r'\x%02X' % ord(ch) for ch in src)`{.python}.
 
 ### Compose signed number byte
 
-Except using struct.pack, we can compose the byte by ourselves easily. For example we know there will be 2500 steps backwards on the serial controller. We can simply generate the bytes with ```result = 0xFFFFFFFF - 2500 + 1```, then pack this byte into string. It is actually ```result = ~2500 + 1```, a bitwise reverse and plus one. To pack this without struct, we can use ```chr(int(hex(src),16))``` for a single byte.
+Except using struct.pack, we can compose the byte by ourselves easily. For example we know there will be 2500 steps backwards on the serial controller. We can simply generate the bytes with `result = 0xFFFFFFFF - 2500 + 1`, then pack this byte into string. It is actually `result = ~2500 + 1`, a bitwise reverse and plus one. To pack this without struct, we can use `chr(int(hex(src),16))` for a single byte.
 
 ### Determine if a variable is signed or not
 

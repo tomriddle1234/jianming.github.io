@@ -6,16 +6,18 @@ from __future__ import unicode_literals
 AUTHOR = u'Jianming'
 SITENAME = u'vfxware'
 SITEURL = 'http://vfxware.com'
+#The following only works with https://github.com/tomriddle1234/pelican-bootstrap3/tree/banner
 BANNER = '/img/testpng.png'
 BANNER_SUBTITLE = 'VFX, Computer Vision, Programming And Life'
 BANNER_ALL_PAGES = True
+
 GITHUB_URL = 'http://github.com/tomriddle1234'
 
 TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = u'en'
 
 # Looks
-THEME = "pelican-bootstrap3"
+THEME = "tyler-pelican-bootstrap3"
 BOOTSTRAP_THEME = "slate"
 CUSTOM_CSS = 'extra/custom.css'
 PYGMENTS_STYLE = 'monokai'
