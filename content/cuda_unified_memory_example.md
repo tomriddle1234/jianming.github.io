@@ -14,6 +14,7 @@ So we implement a 1000k array addition operator here.
 
 
 Firstly, the data format is like this,
+
     :::c++
     const int arraySize = 1000000;
     struct LargeData
