@@ -20,7 +20,7 @@ TIMEZONE = 'Asia/Shanghai'
 DEFAULT_LANG = u'en'
 
 # Looks
-THEME = "ownPelicanTemplate"
+THEME = "tyler-pelican-bootstrap3"
 BOOTSTRAP_THEME = "slate"
 CUSTOM_CSS = 'extra/custom.css'
 PYGMENTS_STYLE = 'monokai'

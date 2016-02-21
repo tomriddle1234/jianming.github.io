@@ -1,9 +1,9 @@
 Title: Contact
-Date: 2014-12-20
+Date: 2015-09-01
 
 Jianming
 
-Associate Research Officer, PICB, CAS, Shanghai.
+Lecture, Guangxi Arts University, School of Film, Television and Media.
 
 ![Alt text](../img/email.jpg)
 
