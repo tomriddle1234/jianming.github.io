@@ -1,0 +1,355 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet/less" type="text/css" href="http://blog.vfxware.com/theme/stylesheet/style.less">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js" type="text/javascript"></script>
+
+  <link rel="stylesheet" type="text/css" href="http://blog.vfxware.com/theme/pygments/github.min.css">
+  <link rel="stylesheet" type="text/css" href="http://blog.vfxware.com/theme/font-awesome/css/font-awesome.min.css">
+
+    <link href="http://blog.vfxware.com/static/custom.css" rel="stylesheet">
+
+    <link href="http://blog.vfxware.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="VFXWARE Blog Atom">
+
+
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#333">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#333">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<meta name="author" content="Jianming" />
+<meta name="description" content="Now, I'm on the Chinese New Year holiday, got some time to learn CUDA which I left it behind for long time. I found the CUDA Programing Doc doesn't present a complete unified memory code. Here is the a blog article about the unified memory in the CUDA 6+, so …" />
+<meta name="keywords" content="CUDA">
+<meta property="og:site_name" content="VFXWARE Blog"/>
+<meta property="og:title" content="CUDA 6.5 starter example with timing and Unified Memory access."/>
+<meta property="og:description" content="Now, I'm on the Chinese New Year holiday, got some time to learn CUDA which I left it behind for long time. I found the CUDA Programing Doc doesn't present a complete unified memory code. Here is the a blog article about the unified memory in the CUDA 6+, so …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="http://blog.vfxware.com/cuda-65-starter-example-with-timing-and-unified-memory-access.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2015-02-20 23:00:00+08:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="http://blog.vfxware.com/author/jianming.html">
+<meta property="article:section" content="Programming"/>
+<meta property="article:tag" content="CUDA"/>
+<meta property="og:image" content="img/sitelogo.png">
+
+  <title>VFXWARE Blog &ndash; CUDA 6.5 starter example with timing and Unified Memory access.</title>
+
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="http://blog.vfxware.com">
+        <img src="img/sitelogo.png" alt="VFXWARE" title="VFXWARE">
+      </a>
+      <h1><a href="http://blog.vfxware.com">VFXWARE</a></h1>
+
+<p>Visual Innovations</p>
+      <nav>
+        <ul class="list">
+          <li><a href="http://blog.vfxware.com/pages/about.html#about">About</a></li>
+          <li><a href="http://blog.vfxware.com/pages/contact.html#contact">Contact</a></li>
+
+          <li><a href="http://portfolio.vfxware.com/" target="_blank">Portfolio</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+        <li><a class="sc-bitbucket" href="https://bitbucket.org/jianming_tom" target="_blank"><i class="fa fa-bitbucket"></i></a></li>
+        <li><a class="sc-github" href="https://github.com/tomriddle1234" target="_blank"><i class="fa fa-github"></i></a></li>
+        <li><a class="sc-google" href="https://plus.google.com/105506953324481647126" target="_blank"><i class="fa fa-google"></i></a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="http://blog.vfxware.com">    Home
+</a>
+
+
+      <a href="http://blog.vfxware.com/feeds/all.atom.xml">    Atom
+</a>
+
+    </nav>
+
+<article class="single">
+  <header>
+    <h1 id="cuda-65-starter-example-with-timing-and-unified-memory-access">CUDA 6.5 starter example with timing and Unified Memory access.</h1>
+    <p>
+          Posted on Fri 20 February 2015 in <a href="http://blog.vfxware.com/category/programming.html">Programming</a>
+
+
+        &#8226; 3 min read
+    </p>
+  </header>
+
+
+  <div>
+    <p>Now, I'm on the Chinese New Year holiday, got some time to learn CUDA which I left it behind for long time.</p>
+<p>I found the <a href="docs.nvidia.com/cuda/cuda-c-programming-guide/index.html">CUDA Programing Doc</a> doesn't present a complete unified memory code.</p>
+<p>Here is the a <a href="http://devblogs.nvidia.com/parallelforall/unified-memory-in-cuda-6/">blog article</a> about the unified memory in the CUDA 6+, so what I did here is just implementing this developer friendly feature merging with the working method of timing both GPU kernal run time and the same function on CPU's run time. </p>
+<p>So we implement a 1000k array addition operator here.</p>
+<p>Firstly, the data format is like this,</p>
+<div class="highlight"><pre><span></span><span class="k">const</span> <span class="kt">int</span> <span class="n">arraySize</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">LargeData</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">hugevalue</span><span class="p">[</span><span class="n">arraySize</span><span class="p">]</span> <span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<p>Then the memory allocation for Unified Memory Access is simply,</p>
+<div class="highlight"><pre><span></span><span class="n">LargeData</span> <span class="o">*</span><span class="n">a</span><span class="p">;</span>
+<span class="n">cudaMallocManaged</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">LargeData</span><span class="p">));</span>
+</pre></div>
+
+
+<p>see, no more code for explicitly copying around :). And after this, we can modify the data on the host memory, it will be automatically delivered to the GPU.</p>
+<div class="highlight"><pre><span></span><span class="n">__global__</span>
+<span class="kt">void</span> <span class="nf">addall</span><span class="p">(</span><span class="n">LargeData</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">LargeData</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">LargeData</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span> <span class="p">;</span>
+    <span class="c1">//the index is calculated from consiering the block position and thread index</span>
+    <span class="n">c</span><span class="o">-&gt;</span><span class="n">hugevalue</span><span class="p">[</span><span class="n">j</span> <span class="o">*</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">-&gt;</span><span class="n">hugevalue</span><span class="p">[</span><span class="n">j</span> <span class="o">*</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="o">-&gt;</span><span class="n">hugevalue</span><span class="p">[</span><span class="n">j</span> <span class="o">*</span> <span class="n">blockDim</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">launchAdd</span><span class="p">(</span><span class="n">LargeData</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">LargeData</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">LargeData</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+
+    <span class="n">dim3</span> <span class="n">threadsPerBlock</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">dim3</span> <span class="n">numBlocks</span><span class="p">(</span><span class="n">arraySize</span> <span class="o">/</span> <span class="n">threadsPerBlock</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="n">addall</span> <span class="o">&lt;&lt;</span> <span class="o">&lt;</span><span class="n">numBlocks</span><span class="p">,</span> <span class="n">threadsPerBlock</span> <span class="o">&gt;&gt;</span> <span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="n">cudaDeviceSynchronize</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">LargeData</span> <span class="o">*</span><span class="n">a</span><span class="p">;</span>
+    <span class="n">LargeData</span> <span class="o">*</span><span class="n">b</span><span class="p">;</span>
+    <span class="n">LargeData</span> <span class="o">*</span><span class="n">c</span><span class="p">;</span>
+
+    <span class="n">cudaMallocManaged</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">LargeData</span><span class="p">));</span>
+    <span class="n">cudaMallocManaged</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">LargeData</span><span class="p">));</span>
+    <span class="n">cudaMallocManaged</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">LargeData</span><span class="p">));</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arraySize</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">a</span><span class="o">-&gt;</span><span class="n">hugevalue</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">b</span><span class="o">-&gt;</span><span class="n">hugevalue</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">c</span><span class="o">-&gt;</span><span class="n">hugevalue</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">launchAdd</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+
+    <span class="n">cudaFree</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+    <span class="n">cudaFree</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">cudaFree</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+
+    <span class="n">cudaDeviceReset</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>And to time the execution time, we use the code from <a href="http://stackoverflow.com/a/7881320/921082">timing CUDA event</a> and <a href="http://stackoverflow.com/a/17440673/921082">timing CPU</a> .</p>
+<div class="highlight"><pre><span></span><span class="c1">//  Windows</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#include</span> <span class="cpf">&lt;Windows.h&gt;</span><span class="cp"></span>
+<span class="kt">double</span> <span class="nf">get_wall_time</span><span class="p">(){</span>
+    <span class="n">LARGE_INTEGER</span> <span class="n">time</span><span class="p">,</span> <span class="n">freq</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">QueryPerformanceFrequency</span><span class="p">(</span><span class="o">&amp;</span><span class="n">freq</span><span class="p">)){</span>
+        <span class="c1">//  Handle error</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">QueryPerformanceCounter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">time</span><span class="p">)){</span>
+        <span class="c1">//  Handle error</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">time</span><span class="p">.</span><span class="n">QuadPart</span> <span class="o">/</span> <span class="n">freq</span><span class="p">.</span><span class="n">QuadPart</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">get_cpu_time</span><span class="p">(){</span>
+    <span class="n">FILETIME</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">GetProcessTimes</span><span class="p">(</span><span class="n">GetCurrentProcess</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="c1">//  Returns total user time.</span>
+        <span class="c1">//  Can be tweaked to include kernel times as well.</span>
+        <span class="k">return</span>
+            <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">d</span><span class="p">.</span><span class="n">dwLowDateTime</span> <span class="o">|</span>
+            <span class="p">((</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="n">d</span><span class="p">.</span><span class="n">dwHighDateTime</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.0000001</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+        <span class="c1">//  Handle error</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//  Posix/Linux</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span> <span class="cpf">&lt;sys/time.h&gt;</span><span class="cp"></span>
+<span class="kt">double</span> <span class="nf">get_wall_time</span><span class="p">(){</span>
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">time</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">gettimeofday</span><span class="p">(</span><span class="o">&amp;</span><span class="n">time</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">)){</span>
+        <span class="c1">//  Handle error</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">time</span><span class="p">.</span><span class="n">tv_sec</span> <span class="o">+</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">time</span><span class="p">.</span><span class="n">tv_usec</span> <span class="o">*</span> <span class="mf">.000001</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">double</span> <span class="nf">get_cpu_time</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">clock</span><span class="p">()</span> <span class="o">/</span> <span class="n">CLOCKS_PER_SEC</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+
+<span class="kt">void</span> <span class="nf">cpuAdd</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">//start cpu computation</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Start CPU </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arraySize</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">aa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span> <span class="n">wall_time0</span><span class="p">,</span> <span class="n">wall_time1</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">cpu_time0</span><span class="p">,</span> <span class="n">cpu_time1</span><span class="p">;</span>
+
+    <span class="n">wall_time0</span> <span class="o">=</span> <span class="n">get_wall_time</span><span class="p">();</span>
+    <span class="n">cpu_time0</span> <span class="o">=</span> <span class="n">get_cpu_time</span><span class="p">();</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arraySize</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">aa</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">bb</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+    <span class="n">wall_time1</span> <span class="o">=</span> <span class="n">get_wall_time</span><span class="p">();</span>
+    <span class="n">cpu_time1</span> <span class="o">=</span> <span class="n">get_cpu_time</span><span class="p">();</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;=== CPU ===</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;CPU -- Wall time: %3.10f ms </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">wall_time1</span> <span class="o">-</span> <span class="n">wall_time0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;CPU -- Cpu time: %3.10f ms </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">cpu_time1</span> <span class="o">-</span> <span class="n">cpu_time0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="nf">launchAdd</span><span class="p">(</span><span class="n">LargeData</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">LargeData</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="n">LargeData</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">float</span> <span class="n">time</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">wall_time0</span><span class="p">,</span> <span class="n">wall_time1</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">cpu_time0</span><span class="p">,</span> <span class="n">cpu_time1</span><span class="p">;</span>
+    <span class="n">cudaEvent_t</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">;</span>
+
+    <span class="n">dim3</span> <span class="n">threadsPerBlock</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">dim3</span> <span class="n">numBlocks</span><span class="p">(</span><span class="n">arraySize</span> <span class="o">/</span> <span class="n">threadsPerBlock</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="n">wall_time0</span> <span class="o">=</span> <span class="n">get_wall_time</span><span class="p">();</span>
+    <span class="n">cpu_time0</span> <span class="o">=</span> <span class="n">get_cpu_time</span><span class="p">();</span>
+
+    <span class="n">HANDLE_ERROR</span><span class="p">(</span><span class="n">cudaEventCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">start</span><span class="p">));</span>
+    <span class="n">HANDLE_ERROR</span><span class="p">(</span><span class="n">cudaEventCreate</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stop</span><span class="p">));</span>
+    <span class="n">HANDLE_ERROR</span><span class="p">(</span><span class="n">cudaEventRecord</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+
+    <span class="n">addall</span> <span class="o">&lt;&lt;</span> <span class="o">&lt;</span><span class="n">numBlocks</span><span class="p">,</span> <span class="n">threadsPerBlock</span> <span class="o">&gt;&gt;</span> <span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+    <span class="n">cudaDeviceSynchronize</span><span class="p">();</span>
+
+    <span class="n">HANDLE_ERROR</span><span class="p">(</span><span class="n">cudaEventRecord</span><span class="p">(</span><span class="n">stop</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+    <span class="n">HANDLE_ERROR</span><span class="p">(</span><span class="n">cudaEventSynchronize</span><span class="p">(</span><span class="n">stop</span><span class="p">));</span>
+    <span class="n">HANDLE_ERROR</span><span class="p">(</span><span class="n">cudaEventElapsedTime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">time</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">));</span>
+
+    <span class="n">wall_time1</span> <span class="o">=</span> <span class="n">get_wall_time</span><span class="p">();</span>
+    <span class="n">cpu_time1</span> <span class="o">=</span> <span class="n">get_cpu_time</span><span class="p">();</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;=== CUDA Execution Time: ===</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Cuda event time to generate:  %3.10f ms </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">time</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Wall time: %3.10f ms </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">wall_time1</span> <span class="o">-</span> <span class="n">wall_time0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Cpu time: %3.10f ms </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">cpu_time1</span> <span class="o">-</span> <span class="n">cpu_time0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>At last, you can find the complete source code from <a href="https://github.com/tomriddle1234/cuda_examples/blob/master/arrayAdd_UnifiedMemory.cu">github</a>.</p>
+<p>The resul I got is for 1000k array,</p>
+<div class="highlight"><pre><span></span>Start CPU
+=== CPU ===
+CPU -- Wall time: 5.6946210389 ms
+CPU -- Cpu time: 0.0000000000 ms
+=== CUDA Execution Time: ===
+Cuda event time to generate:  0.5817599893 ms
+Wall time: 8.6047964578 ms
+Cpu time: 0.0000000000 ms
+</pre></div>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="http://blog.vfxware.com/tag/cuda.html">CUDA</a>
+    </p>
+  </div>
+
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'vfxware';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+        Please enable JavaScript to view comments.
+
+</noscript>
+</article>
+
+    <footer>
+<p>
+  &copy; Jianming Guo 2017 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+         src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " VFXWARE Blog ",
+  "url" : "http://blog.vfxware.com",
+  "image": "img/sitelogo.png",
+  "description": "VFXWARE, the growing creative partner devotes itself on Visual Innovations."
+}
+</script>
+</body>
+</html>

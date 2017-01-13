@@ -2,66 +2,70 @@
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
 
-# Text config
-AUTHOR = u'Jianming'
-SITENAME = u'vfxware'
-SITEURL = 'http://vfxware.com'
-#The following only works with https://github.com/tomriddle1234/pelican-bootstrap3/tree/banner
-BANNER = '/img/testpng.png'
-BANNER_SUBTITLE = 'VFX, Computer Vision, Programming And Life'
-BANNER_ALL_PAGES = True
+AUTHOR = u'Jianming Guo'
+SITENAME = u'VFXWARE Blog'
+SITEURL = 'http://blog.vfxware.com'
 
-SHOW_ARTICLE_AUTHOR = True
-SHOW_ARTICLE_CATEGORY = True
-
-GITHUB_URL = 'http://github.com/tomriddle1234'
-
-TIMEZONE = 'Asia/Shanghai'
-DEFAULT_LANG = u'en'
-
-# Looks
-THEME = "ownPelicanTemplate"
-BOOTSTRAP_THEME = "slate"
-CUSTOM_CSS = 'extra/custom.css'
-PYGMENTS_STYLE = 'monokai'
+SITETITLE = 'VFXWARE'
+SITESUBTITLE = 'Visual Innovations'
+SITEDESCRIPTION = 'VFXWARE, the growing creative partner devotes itself on Visual Innovations.'
+SITELOGO = 'img/sitelogo.png'
+FAVICON = 'img/favicon.ico'
 
 
-DISPLAY_CATEGORIES_ON_MENU = False
-DISPLAY_CATEGORIES_ON_SIDEBAR = True
-DISPLAY_TAGS_ON_SIDEBAR = True
-DISPLAY_TAGS_INLINE = True
-DISPLAY_RECENT_POSTS_ON_SIDEBAR = True
-RECENT_POST_COUNT = 5
+STATIC_PATHS = ['img','images', 'extra']
 
-# Comment configuration
-DISQUS_SITENAME = u"vfxware"
+BROWSER_COLOR = '#333'
+ROBOTS = 'index, follow'
 
-# Make configuration
-PATH = 'content'
-STATIC_PATHS = [u"img",u"extra"]
-# Tell Pelican to change the path to 'static/custom.css' in the output dir
-#EXTRA_PATH_METADATA = {
-#    'extra/custom.css': {'path': 'static/custom.css'}
-#}
+CC_LICENSE = {
+    'name': 'Creative Commons Attribution-ShareAlike',
+    'version': '4.0',
+    'slug': 'by-sa'
+}
 
-# Plugins configuration
+COPYRIGHT_YEAR = 2017
+
+EXTRA_PATH_METADATA = {
+    'extra/custom.css': {'path': 'static/custom.css'},
+}
+CUSTOM_CSS = 'static/custom.css'
+
+MAIN_MENU = True
+
+
 PLUGIN_PATHS = ["plugins","/home/tom/src/pelican-plugins"]
 
-PLUGINS = ["sitemap"]
+DISQUS_SITENAME = 'vfxware'
+
+PATH = 'content'
+
+TIMEZONE = 'Asia/Shanghai'
+
+DEFAULT_LANG = u'en'
+
+# Enable i18n plugin.
+PLUGINS = ['sitemap', 'post_stats']
 
 SITEMAP = {
-    "format": "xml",
-    "priorities": {
-        "articles": 0.7,
-        "indexes": 0.5,
-        "pages": 0.3,
+    'format': 'xml',
+    'priorities': {
+        'articles': 0.6,
+        'indexes': 0.6,
+        'pages': 0.5,
     },
-    "changefreqs": {
-        "articles": "daily",
-        "indexes": "daily",
-        "pages": "monthly",
+    'changefreqs': {
+        'articles': 'monthly',
+        'indexes': 'daily',
+        'pages': 'monthly',
     }
 }
+
+
+# Enable Jinja2 i18n extension used to parse translations.
+#JINJA_ENVIRONMENT = {'extensions':['jinja2.ext.i18n']}
+
+THEME = "Flex"
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -71,17 +75,17 @@ AUTHOR_FEED_ATOM = None
 AUTHOR_FEED_RSS = None
 
 # Blogroll
-LINKS = (('Pelican', 'http://getpelican.com/'),
-         (u'OpenCV','http://opencv.org/'), )
-         #('You can modify those links in your config file', '#'),)
+LINKS = (('Portfolio', 'http://portfolio.vfxware.com/'),)
 
 # Social widget
-SOCIAL = ((u'WeChat', 'weixin://contacts/profile/tomriddle_jianming'),
-	   (u'bitBucket', 'https://bitbucket.org/jianming_tom'),
-           (u'GitHub', 'https://github.com/tomriddle1234'),)
-          #('Another social link', '#'),)
+SOCIAL = ( ('bitbucket', 'https://bitbucket.org/jianming_tom'),
+           ('github', 'https://github.com/tomriddle1234'),
+           ('google','https://plus.google.com/105506953324481647126'))
+
 
 DEFAULT_PAGINATION = 10
 
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
+
+USE_LESS = True
