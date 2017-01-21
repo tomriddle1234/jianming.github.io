@@ -110,52 +110,66 @@
 <ol>
 <li>
 <p>Install openssl</p>
-<p>:::sh
-sudo apt-get install libssl-dev</p>
+<div class="highlight"><pre><span></span>sudo apt-get install libssl-dev
+</pre></div>
+
+
 </li>
 <li>
 <p>Update pip</p>
-<p>:::sh
-sudo pip install --upgrade pip</p>
+<div class="highlight"><pre><span></span>sudo pip install --upgrade pip
+</pre></div>
+
+
 </li>
 <li>
 <p>Install fabric and bs4</p>
-<p>:::sh
-sudo pip install fabric bs4</p>
+<div class="highlight"><pre><span></span>sudo pip install fabric bs4
+</pre></div>
+
+
 </li>
 <li>
 <p>Install pelican and other dependencies</p>
-<p>:::sh
-sudo pip install pelican Markdown typogrify</p>
+<div class="highlight"><pre><span></span>sudo pip install pelican Markdown typogrify
+</pre></div>
+
+
 </li>
 <li>
 <p>Check out or git clone the pelican themes and plugins</p>
-<p>:::sh
-git clone <the custom theme></p>
+<div class="highlight"><pre><span></span>git clone &lt;the custom theme&gt;
+
+<span class="c1">#for plugins:</span>
+git clone https://github.com/getpelican/pelican-plugins.git
+</pre></div>
+
+
 </li>
-</ol>
-<p>for plugins:
-    :::sh
-    git clone https://github.com/getpelican/pelican-plugins.git</p>
-<ol>
 <li>
 <p>install theme like</p>
-<p>:::sh
-sudo pelican-themes -i <the custom theme path></p>
+<div class="highlight"><pre><span></span>sudo pelican-themes -i &lt;the custom theme path&gt;
+</pre></div>
+
+
 </li>
 <li>
 <p>Checkout your pelican website code, and use fab build to check if the pelican code can run</p>
-<p>:::sh
-git clone <your pelican website repo>
-cd <your pelican website repo folder>
-fab build</p>
+<div class="highlight"><pre><span></span>git clone &lt;your pelican website repo&gt;
+<span class="nb">cd</span> &lt;your pelican website repo folder&gt;
+fab build
+</pre></div>
+
+
 </li>
 </ol>
 <p>Tips:</p>
-<h1><code>fab publish</code> to send it remotely to the web server, the configuration is in the publishconf.py file.</h1>
-<h1>To check the detail installation instruction, please refer to the <a href="http://docs.getpelican.com/en/stable/">official doc</a></h1>
-<p>Note: </p>
-<h3><code>Markdown</code> must be installed to properly scan the md files.</h3>
+<ol>
+<li><code>fab publish</code> to send it remotely to the web server, the configuration is in the publishconf.py file.</li>
+<li>To check the detail installation instruction, please refer to the <a href="http://docs.getpelican.com/en/stable/">official doc</a></li>
+</ol>
+<p>Note: 
+Pip package Markdown must be installed to properly scan the md files.</p>
   </div>
   <div class="tag-cloud">
     <p>
