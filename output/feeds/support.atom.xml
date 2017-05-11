@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>VFXWARE Blog - Support</title><link href="http://blog.vfxware.com/" rel="alternate"></link><link href="http://blog.vfxware.com/feeds/support.atom.xml" rel="self"></link><id>http://blog.vfxware.com/</id><updated>2017-05-11T00:00:00+08:00</updated><entry><title>360 HDR Bracket Tool For Theta App</title><link href="http://blog.vfxware.com/360-hdr-bracket-tool-for-theta-app.html" rel="alternate"></link><published>2017-05-11T00:00:00+08:00</published><updated>2017-05-11T00:00:00+08:00</updated><author><name>Jianming Guo</name></author><id>tag:blog.vfxware.com,2017-05-11:/360-hdr-bracket-tool-for-theta-app.html</id><summary type="html">&lt;p&gt;Welcome to my blog, and thank you for purchasing my app.&lt;/p&gt;
+&lt;p&gt;The 360 HDR Bracket Tool For Theta App I developed is intented to provide a lower cost convenient 3D or VFX on set production tool, working together with a RICOH Theta S or Theta SC 360 camera.&lt;/p&gt;
+&lt;p&gt;This app …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Welcome to my blog, and thank you for purchasing my app.&lt;/p&gt;
+&lt;p&gt;The 360 HDR Bracket Tool For Theta App I developed is intented to provide a lower cost convenient 3D or VFX on set production tool, working together with a RICOH Theta S or Theta SC 360 camera.&lt;/p&gt;
+&lt;p&gt;This app is capable of shooting multiple 360 images with wide range exposure level settings automatically, which is more than the official Theta App can do. It is designed for on set work, and has the logging function allowing post processing the images faster. &lt;/p&gt;
+&lt;p align="center"&gt;&lt;img src="../img/theta_app_icon_256.png"/&gt;&lt;/p&gt;
+
+&lt;p&gt;Some result images,&lt;/p&gt;
+&lt;p align="center"&gt;&lt;img src="../img/ios_ad_comp_5s.png"/&gt;&lt;/p&gt;
+
+&lt;p&gt;My app is now available on Google Play &lt;a href="https://play.google.com/store/apps/details?id=com.vfxware.thetashdr"&gt;here&lt;/a&gt;
+&lt;a href="https://play.google.com/store/apps/details?id=com.vfxware.thetashdr"&gt;&lt;img src="../img/google_play_badge_400.png" width="200"&gt;&lt;/a&gt;, &lt;/p&gt;
+&lt;p&gt;on Apple App Store &lt;a href="https://itunes.apple.com/us/app/360-bracket-tool-for-td/id1209836992"&gt;here&lt;/a&gt;.
+&lt;a href="https://itunes.apple.com/us/app/360-bracket-tool-for-td/id1209836992"&gt;&lt;img src="../img/App_Store_Badge_400.png" width="200"&gt;&lt;/a&gt;&lt;/p&gt;</content><category term="App"></category><category term="Development"></category><category term="Computer Vision"></category><category term="VFX"></category></entry></feed>
